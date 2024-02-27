@@ -1,0 +1,30 @@
+{
+    // Use o IntelliSense para saber mais sobre os atributos possíveis.
+    // Focalizar para exibir as descrições dos atributos existentes.
+    // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "MoaScpMh",
+            "request": "launch",
+            "mainClass": "lucaswolschick.moa_scp_mh.MoaScpMh",
+            "projectName": "moa_scp_mh",
+            "args": "${input:args}"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "args",
+            "type": "promptString",
+            "description": "Instância de entrada do SCP",
+            "default": "input/Teste_01.dat",
+        }
+    ]
+}
