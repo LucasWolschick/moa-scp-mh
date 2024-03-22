@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Instancia {
+    private final String nome;
     private final int nLinhas;
     private final int nColunas;
     private final double densidade;
     private final List<Coluna> dados;
 
-    public Instancia(int n_linhas, int n_colunas, double densidade, List<Coluna> dados) {
+    public Instancia(String nome, int n_linhas, int n_colunas, double densidade, List<Coluna> dados) {
+        this.nome = nome;
         this.nLinhas = n_linhas;
         this.nColunas = n_colunas;
         this.densidade = densidade;
@@ -91,5 +93,9 @@ public class Instancia {
         } else if (!dados.equals(other.dados))
             return false;
         return true;
+    }
+
+    public String nome() {
+        return nome;
     }
 }

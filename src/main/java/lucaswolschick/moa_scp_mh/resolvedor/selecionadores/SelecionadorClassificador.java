@@ -40,4 +40,10 @@ public class SelecionadorClassificador implements Operadores.Selecao {
             i -= 1;
         return sortidos.get(i);
     }
+
+    @Override
+    public String toString() {
+        return "SelecionadorClassificador []";
+    }
+
 }

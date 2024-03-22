@@ -87,4 +87,10 @@ public class MutadorTrocaColunasAleatorio implements Operadores.Mutacao {
 
         return new HashSet<>(colunas);
     }
+
+    @Override
+    public String toString() {
+        return "MutadorTrocaColunasAleatorio [probMutacaoColuna=" + probMutacaoColuna + "]";
+    }
+
 }

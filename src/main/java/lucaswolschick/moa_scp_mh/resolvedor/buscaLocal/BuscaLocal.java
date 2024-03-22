@@ -87,6 +87,12 @@ public class BuscaLocal implements Operadores.BuscaLocal {
             return vizinhos.stream().min(Comparator.comparing(Solucao::getCusto)).orElse(solucao);
         }
     }
+
+    @Override
+    public String toString() {
+        return "BuscaLocal [estrategia=" + estrategia + ", colunasTrocadas=" + colunasTrocadas + "]";
+    }
+
 }
 
 class CombinationsIterator<T> implements Iterable<List<T>>, Iterator<List<T>> {

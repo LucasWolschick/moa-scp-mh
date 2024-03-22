@@ -36,4 +36,9 @@ public class AtualizadorElitista implements Operadores.Atualizacao {
         return novaPop;
     }
 
+    @Override
+    public String toString() {
+        return "AtualizadorElitista [fracElitista=" + fracElitista + ", tamanhoPopulacao=" + tamanhoPopulacao + "]";
+    }
+
 }

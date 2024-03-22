@@ -137,10 +137,12 @@ public class ResolvedorConfiguracao {
 
     @Override
     public String toString() {
-        return "ResolvedorConfiguracao [tamanhoPopulacao=" + tamanhoPopulacao + ", maxGeracoes=" + maxGeracoes
-                + ", gerador=" + gerador + ", avaliador=" + avaliador + ", selecionador=" + selecionador + ", cruzador="
-                + cruzador + ", mutador=" + mutador + ", buscaLocal=" + buscaLocal + ", atualizador=" + atualizador
-                + "]";
+        return "ResolvedorConfiguracao [\n\ttamanhoPopulacao=" + tamanhoPopulacao + ",\n\tmaxGeracoes=" + maxGeracoes
+                + ",\n\tgerador=" + gerador + ",\n\tavaliador=" + avaliador + ",\n\tselecionador=" + selecionador
+                + ",\n\tcruzador="
+                + cruzador + ",\n\tmutador=" + mutador + ",\n\tbuscaLocal=" + buscaLocal + ",\n\tatualizador="
+                + atualizador
+                + "\n]";
     }
 
 }

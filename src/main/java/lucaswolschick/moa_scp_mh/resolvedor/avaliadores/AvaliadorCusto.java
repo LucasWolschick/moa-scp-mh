@@ -16,4 +16,9 @@ public class AvaliadorCusto implements Operadores.Avaliacao {
                 (map, s) -> map.put(s, s.getCusto()),
                 HashMap::putAll);
     }
+
+    @Override
+    public String toString() {
+        return "AvaliadorCusto []";
+    }
 }

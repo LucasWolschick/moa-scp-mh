@@ -15,4 +15,10 @@ public class CruzadorRemovedorRedundancias implements Operadores.Cruzamento {
         // remove redundâncias
         return solucao.removeRedundantes();
     }
+
+    @Override
+    public String toString() {
+        return "CruzadorRemovedorRedundancias []";
+    }
+
 }

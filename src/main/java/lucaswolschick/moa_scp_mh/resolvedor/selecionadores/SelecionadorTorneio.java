@@ -41,4 +41,10 @@ public class SelecionadorTorneio implements Operadores.Selecao {
         }
         return melhorSolucao;
     }
+
+    @Override
+    public String toString() {
+        return "SelecionadorTorneio [k=" + k + "]";
+    }
+
 }

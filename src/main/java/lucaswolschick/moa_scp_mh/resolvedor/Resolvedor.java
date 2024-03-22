@@ -19,16 +19,18 @@ public class Resolvedor {
     private Instancia instancia;
     private List<Solucao> pop;
     private int geracao;
+    private long semente;
 
-    public Resolvedor(Instancia instancia, ResolvedorConfiguracao cfg) {
+    public Resolvedor(Instancia instancia, long semente, ResolvedorConfiguracao cfg) {
         this.cfg = cfg;
         this.instancia = instancia;
         this.pop = new ArrayList<>();
         this.geracao = 0;
+        this.semente = semente;
     }
 
-    public Resolvedor(Instancia instancia, int tamanhoPopulacao, int maxGeracoes) {
-        this(instancia, new ResolvedorConfiguracao(
+    public Resolvedor(Instancia instancia, long semente, int tamanhoPopulacao, int maxGeracoes) {
+        this(instancia, semente, new ResolvedorConfiguracao(
                 tamanhoPopulacao,
                 maxGeracoes,
                 new GeradorAleatorio(tamanhoPopulacao),
@@ -41,6 +43,9 @@ public class Resolvedor {
     }
 
     public void resolve() {
+        System.out.println("Instância: " + instancia.nome());
+        System.out.println("Configuração: " + cfg);
+        System.out.println("Semente: " + semente);
         System.out.println("Gerando população inicial (geração 1)...");
         pop = geraPopulacaoInicial();
         System.out.println("(Custo = " + melhorSolucao().getCusto() + "; Custo médio = " + custoMedio() + ")");

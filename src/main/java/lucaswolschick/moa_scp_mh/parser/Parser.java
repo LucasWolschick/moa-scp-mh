@@ -17,7 +17,7 @@ public class Parser {
         return lst;
     }
 
-    public static Instancia parseProblema(String src) {
+    public static Instancia parseProblema(String nome, String src) {
         var linhas = src.lines()
                 .map(String::trim)
                 .filter((s) -> !s.isEmpty())
@@ -30,6 +30,6 @@ public class Parser {
                 .collect(Collectors.summingInt((d) -> d.elem().size()));
         var densidade = (double) total / (n_linhas * n_colunas);
 
-        return new Instancia(n_linhas, n_colunas, densidade, dados);
+        return new Instancia(nome, n_linhas, n_colunas, densidade, dados);
     }
 }

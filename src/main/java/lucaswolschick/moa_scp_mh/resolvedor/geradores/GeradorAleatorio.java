@@ -61,4 +61,10 @@ public class GeradorAleatorio implements Gerador {
 
         return new Solucao(colunasSolucao, instancia).removeRedundantes();
     }
+
+    @Override
+    public String toString() {
+        return "GeradorAleatorio [tamanhoPopulacao=" + tamanhoPopulacao + "]";
+    }
+
 }

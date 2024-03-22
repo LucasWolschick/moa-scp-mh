@@ -78,4 +78,10 @@ public class MutadorTrocaUmaColunaAleatorio implements Operadores.Mutacao {
 
         return new Solucao(new HashSet<>(colunas), instancia);
     }
+
+    @Override
+    public String toString() {
+        return "MutadorTrocaUmaColunaAleatorio [probMutacaoIndividuo=" + probMutacaoIndividuo + "]";
+    }
+
 }

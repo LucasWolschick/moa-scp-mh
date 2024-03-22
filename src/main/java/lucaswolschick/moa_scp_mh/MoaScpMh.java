@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.Random;
 
 import lucaswolschick.moa_scp_mh.parser.Parser;
 import lucaswolschick.moa_scp_mh.resolvedor.Resolvedor;
@@ -20,10 +21,18 @@ public class MoaScpMh {
         parser.addArgument("entrada")
                 .type(Arguments.fileType().verifyExists().verifyIsFile().verifyCanRead().acceptSystemIn())
                 .help("O problema a ser resolvido.");
+        parser.addArgument("--semente")
+                .type(Long.class)
+                .help("A semente a ser utilizada pelo solucionador.");
 
         var ns = parser.parseArgsOrFail(args);
 
         var entrada = (File) ns.get("entrada");
+        long semente;
+        {
+            var sementeArg = (Integer) ns.get("semente");
+            semente = sementeArg == null ? System.currentTimeMillis() : sementeArg;
+        }
 
         String fonte;
         try {
@@ -33,8 +42,8 @@ public class MoaScpMh {
             return;
         }
 
-        var instancia = Parser.parseProblema(fonte);
-        var resolvedor = new Resolvedor(instancia, 100, 10);
+        var instancia = Parser.parseProblema(entrada.toPath().getFileName().toString(), fonte);
+        var resolvedor = new Resolvedor(instancia, semente, 100, 10);
         resolvedor.resolve();
         System.out.println(resolvedor.melhorSolucao().removeRedundantes());
     }
