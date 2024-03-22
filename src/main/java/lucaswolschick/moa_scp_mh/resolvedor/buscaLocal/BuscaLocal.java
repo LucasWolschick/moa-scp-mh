@@ -3,6 +3,7 @@ package lucaswolschick.moa_scp_mh.resolvedor.buscaLocal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -63,7 +64,7 @@ public class BuscaLocal implements Operadores.BuscaLocal {
                         .collect(Collectors.toList());
 
                 // adiciona novas colunas
-                for (var comb : combinations(colunasNaoNaSolucao, numNovasColunas)) {
+                for (var comb : new CombinationsIterator<>(colunasNaoNaSolucao, numNovasColunas)) {
                     var novaSolucao = new ArrayList<Integer>(novasColunas);
                     novaSolucao.addAll(comb);
                     if (Solucao.solucaoValida(novaSolucao, instancia)) {
@@ -86,26 +87,52 @@ public class BuscaLocal implements Operadores.BuscaLocal {
             return vizinhos.stream().min(Comparator.comparing(Solucao::getCusto)).orElse(solucao);
         }
     }
+}
 
-    public static <T> List<List<T>> combinations(List<T> lst, int k) {
-        if (k == 0) {
-            List<List<T>> result = new ArrayList<>();
-            result.add(new ArrayList<>());
-            return result;
-        } else {
-            List<List<T>> result = new ArrayList<>();
-            for (int i = 0; i < lst.size(); i++) {
-                T val = lst.get(i);
-                List<T> subList = lst.subList(i + 1, lst.size());
-                List<List<T>> subResult = combinations(subList, k - 1);
-                for (var sub : subResult) {
-                    List<T> temp = new ArrayList<>();
-                    temp.add(val);
-                    temp.addAll(sub);
-                    result.add(temp);
-                }
-            }
-            return result;
+class CombinationsIterator<T> implements Iterable<List<T>>, Iterator<List<T>> {
+    private final List<T> elementos;
+    private final int k;
+
+    private int[] indices;
+    private boolean hasNext = true;
+
+    public CombinationsIterator(List<T> elementos, int k) {
+        this.elementos = elementos;
+        this.k = k;
+        this.indices = IntStream.range(0, k).toArray();
+    }
+
+    @Override
+    public Iterator<List<T>> iterator() {
+        return this;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return hasNext;
+    }
+
+    @Override
+    public List<T> next() {
+        var result = new ArrayList<T>();
+        for (var i : indices) {
+            result.add(elementos.get(i));
         }
+
+        int i = k - 1;
+        while (i >= 0 && indices[i] == elementos.size() - k + i) {
+            i--;
+        }
+
+        if (i < 0) {
+            hasNext = false;
+        } else {
+            indices[i]++;
+            for (int j = i + 1; j < k; j++) {
+                indices[j] = indices[j - 1] + 1;
+            }
+        }
+
+        return result;
     }
 }
