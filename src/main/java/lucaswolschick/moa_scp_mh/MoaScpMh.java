@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.util.Random;
 
 import lucaswolschick.moa_scp_mh.parser.Parser;
 import lucaswolschick.moa_scp_mh.resolvedor.Resolvedor;
@@ -30,7 +29,7 @@ public class MoaScpMh {
         var entrada = (File) ns.get("entrada");
         long semente;
         {
-            var sementeArg = (Integer) ns.get("semente");
+            var sementeArg = (Long) ns.get("semente");
             semente = sementeArg == null ? System.currentTimeMillis() : sementeArg;
         }
 

@@ -9,15 +9,14 @@ import lucaswolschick.moa_scp_mh.resolvedor.Solucao;
 
 public class AtualizadorElitista implements Operadores.Atualizacao {
     private double fracElitista;
-    private int tamanhoPopulacao;
 
-    public AtualizadorElitista(double fracElitista, int tamanhoPopulacao) {
+    public AtualizadorElitista(double fracElitista) {
         this.fracElitista = fracElitista;
-        this.tamanhoPopulacao = tamanhoPopulacao;
     }
 
     @Override
-    public List<Solucao> atualiza(List<Solucao> pop, List<Solucao> descendentes, Instancia instancia) {
+    public List<Solucao> atualiza(List<Solucao> pop, List<Solucao> descendentes, int tamanhoPopulacao,
+            Instancia instancia, long _semente) {
         var novaPop = new ArrayList<Solucao>(pop);
 
         pop = new ArrayList<>(pop);
@@ -38,7 +37,7 @@ public class AtualizadorElitista implements Operadores.Atualizacao {
 
     @Override
     public String toString() {
-        return "AtualizadorElitista [fracElitista=" + fracElitista + ", tamanhoPopulacao=" + tamanhoPopulacao + "]";
+        return "AtualizadorElitista [fracElitista=" + fracElitista + "]";
     }
 
 }

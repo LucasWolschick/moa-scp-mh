@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
+import java.nio.file.Path;
+
 public class Parser {
     private static List<Double> extraiNumeros(String s) {
         var p = Pattern.compile("[-+]?(?:\\d*\\.*\\d+)");
@@ -31,5 +33,15 @@ public class Parser {
         var densidade = (double) total / (n_linhas * n_colunas);
 
         return new Instancia(nome, n_linhas, n_colunas, densidade, dados);
+    }
+
+    public static Instancia parseFile(Path path) {
+        try {
+            var nome = path.getFileName().toString();
+            var src = new String(java.nio.file.Files.readAllBytes(path));
+            return parseProblema(nome, src);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

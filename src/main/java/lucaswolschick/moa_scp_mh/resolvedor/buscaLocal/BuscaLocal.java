@@ -26,8 +26,10 @@ public class BuscaLocal implements Operadores.BuscaLocal {
     }
 
     @Override
-    public List<Solucao> buscaLocal(List<Solucao> pop, Instancia instancia) {
-        return pop.parallelStream().map(s -> melhoraSolucao(s, instancia)).collect(Collectors.toList());
+    public List<Solucao> buscaLocal(List<Solucao> pop, Instancia instancia, long _seed) {
+        return IntStream.range(0, pop.size()).parallel()
+                .mapToObj((var i) -> melhoraSolucao(pop.get(i), instancia))
+                .collect(Collectors.toList());
     }
 
     private Solucao melhoraSolucao(Solucao solucao, Instancia instancia) {

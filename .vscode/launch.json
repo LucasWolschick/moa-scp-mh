@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Tester",
+            "request": "launch",
+            "mainClass": "lucaswolschick.moa_scp_mh.Tester",
+            "projectName": "moa_scp_mh"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
@@ -16,7 +23,7 @@
             "request": "launch",
             "mainClass": "lucaswolschick.moa_scp_mh.MoaScpMh",
             "projectName": "moa_scp_mh",
-            "args": "${input:args}"
+            "args": "${input:args} --semente 1"
         }
     ],
     "inputs": [

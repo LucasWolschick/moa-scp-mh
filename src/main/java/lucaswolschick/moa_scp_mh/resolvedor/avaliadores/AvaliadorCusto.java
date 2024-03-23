@@ -10,7 +10,7 @@ import lucaswolschick.moa_scp_mh.resolvedor.Solucao;
 
 public class AvaliadorCusto implements Operadores.Avaliacao {
     @Override
-    public Map<Solucao, Double> avalia(List<Solucao> pop, Instancia instancia) {
+    public Map<Solucao, Double> avalia(List<Solucao> pop, Instancia instancia, long _seed) {
         return pop.parallelStream().collect(
                 HashMap::new,
                 (map, s) -> map.put(s, s.getCusto()),

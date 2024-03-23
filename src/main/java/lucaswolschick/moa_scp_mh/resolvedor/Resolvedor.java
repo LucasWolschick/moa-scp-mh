@@ -33,13 +33,13 @@ public class Resolvedor {
         this(instancia, semente, new ResolvedorConfiguracao(
                 tamanhoPopulacao,
                 maxGeracoes,
-                new GeradorAleatorio(tamanhoPopulacao),
+                new GeradorAleatorio(),
                 new AvaliadorCusto(),
                 new SelecionadorTorneio(4),
                 new CruzadorRemovedorRedundancias(),
                 new MutadorTrocaColunasAleatorio(0.2f),
                 new BuscaLocal(BuscaLocal.Estrategia.FIRST_IMPROVEMENT, 2),
-                new AtualizadorElitista(0.1f, tamanhoPopulacao)));
+                new AtualizadorElitista(0.1f)));
     }
 
     public void resolve() {
@@ -47,37 +47,52 @@ public class Resolvedor {
         System.out.println("Configuração: " + cfg);
         System.out.println("Semente: " + semente);
         System.out.println("Gerando população inicial (geração 1)...");
+
+        var now = System.currentTimeMillis();
+
         pop = geraPopulacaoInicial();
-        System.out.println("(Custo = " + melhorSolucao().getCusto() + "; Custo médio = " + custoMedio() + ")");
+        System.out.println(
+                "(Custo = " + melhorSolucao().getCusto() + "; Custo médio = " + custoMedio() + "; Desvio padrão = "
+                        + desvioPadraoCusto() + "; tempo = " + (System.currentTimeMillis() - now) / 1000.0 + "s)");
         geracao += 1;
 
         while (!criterioDeParada()) {
-            System.err.println("Geração " + (geracao + 1) + "...");
+            System.out.println("Geração " + (geracao + 1) + "...");
             pop = criaGeracao();
-            System.out.println("(Custo = " + melhorSolucao().getCusto() + "; Custo médio = " + custoMedio() + ")");
+            System.out.println(
+                    "(Custo = " + melhorSolucao().getCusto() + "; Custo médio = " + custoMedio() + "; Desvio padrão = "
+                            + desvioPadraoCusto() + "; tempo = " + (System.currentTimeMillis() - now) / 1000.0 + "s)");
             geracao += 1;
         }
-        System.err.println("Feito.");
+        System.out.println("Feito.");
+
+        var elapsed = System.currentTimeMillis() - now;
+
+        System.out.println("Tempo de execução: " + elapsed / 1000.0 + "s");
     }
 
     private List<Solucao> criaGeracao() {
         // avalia população
-        var avaliacao = cfg.avaliador().avalia(pop, instancia);
+        var avaliacao = cfg.avaliador().avalia(pop, instancia, semente);
         // gera indivíduos descendentes
         List<Solucao> descendentes = IntStream.range(0, cfg.tamanhoPopulacao()).parallel()
                 .mapToObj((var i) -> {
-                    var geradores = cfg.selecionador().seleciona(avaliacao, instancia);
-                    return cfg.cruzador().cruza(geradores[0], geradores[1], instancia);
+                    var geradores = cfg.selecionador().seleciona(avaliacao, instancia,
+                            semente + i + geracao * cfg.tamanhoPopulacao());
+                    return cfg.cruzador().cruza(geradores[0], geradores[1], instancia,
+                            semente + i + geracao * cfg.tamanhoPopulacao());
                 })
                 .collect(Collectors.toList());
         // muta descendentes
         if (cfg.mutador() != null)
-            descendentes = cfg.mutador().muta(descendentes, instancia);
+            descendentes = cfg.mutador().muta(descendentes, instancia, semente + geracao * cfg.tamanhoPopulacao());
         // busca local
         if (cfg.buscaLocal() != null)
-            descendentes = cfg.buscaLocal().buscaLocal(descendentes, instancia);
+            descendentes = cfg.buscaLocal().buscaLocal(descendentes, instancia,
+                    semente + geracao * cfg.tamanhoPopulacao());
         // atualiza população com novos descendentes
-        var novaPop = cfg.atualizador().atualiza(pop, descendentes, instancia);
+        var novaPop = cfg.atualizador().atualiza(pop, descendentes, cfg.tamanhoPopulacao(), instancia,
+                semente + geracao * cfg.tamanhoPopulacao());
         return novaPop;
     }
 
@@ -94,15 +109,27 @@ public class Resolvedor {
 
     }
 
+    public double desvioPadraoCusto() {
+        if (pop.isEmpty())
+            throw new RuntimeException("Tentativa de obter desvio padrão de custo de problema não resolvido");
+        var media = custoMedio();
+        return Math.sqrt(pop.stream().map((var l) -> Math.pow(l.getCusto() - media, 2))
+                .collect(Collectors.summingDouble((var l) -> l)) / (pop.size() - 1));
+    }
+
     public boolean pronto() {
         return criterioDeParada();
     }
 
     private List<Solucao> geraPopulacaoInicial() {
-        return cfg.gerador().geraPopulacaoInicial(instancia);
+        return cfg.gerador().geraPopulacaoInicial(instancia, cfg.tamanhoPopulacao(), semente);
     }
 
     private boolean criterioDeParada() {
         return geracao >= cfg.maxGeracoes();
+    }
+
+    public ResolvedorConfiguracao cfg() {
+        return cfg;
     }
 }

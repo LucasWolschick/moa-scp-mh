@@ -69,4 +69,41 @@ public class Solucao {
 
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((colunas == null) ? 0 : colunas.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(custo);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + ((instancia == null) ? 0 : instancia.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Solucao other = (Solucao) obj;
+        if (colunas == null) {
+            if (other.colunas != null)
+                return false;
+        } else if (!colunas.equals(other.colunas))
+            return false;
+        if (Double.doubleToLongBits(custo) != Double.doubleToLongBits(other.custo))
+            return false;
+        if (instancia == null) {
+            if (other.instancia != null)
+                return false;
+        } else if (!instancia.equals(other.instancia))
+            return false;
+        return true;
+    }
+
 }

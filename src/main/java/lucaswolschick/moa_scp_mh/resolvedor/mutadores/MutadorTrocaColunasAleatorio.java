@@ -3,13 +3,14 @@ package lucaswolschick.moa_scp_mh.resolvedor.mutadores;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import lucaswolschick.moa_scp_mh.parser.Instancia;
 import lucaswolschick.moa_scp_mh.resolvedor.Operadores;
 import lucaswolschick.moa_scp_mh.resolvedor.Solucao;
+import lucaswolschick.moa_scp_mh.resolvedor.ThreadRandomFactory;
 
 public class MutadorTrocaColunasAleatorio implements Operadores.Mutacao {
 
@@ -20,8 +21,8 @@ public class MutadorTrocaColunasAleatorio implements Operadores.Mutacao {
     }
 
     @Override
-    public List<Solucao> muta(List<Solucao> cruzamentos, Instancia instancia) {
-        var random = ThreadLocalRandom.current();
+    public List<Solucao> muta(List<Solucao> cruzamentos, Instancia instancia, long semente) {
+        var random = ThreadRandomFactory.getRandom(semente);
         var solucoes = new ArrayList<>(cruzamentos);
         var novasSolucoes = new ArrayList<Solucao>();
         for (var solucao : solucoes) {
@@ -29,7 +30,7 @@ public class MutadorTrocaColunasAleatorio implements Operadores.Mutacao {
             var colunasNovaSolucao = new HashSet<Integer>();
             for (int i = 0; i < colunas.size(); i++) {
                 if (random.nextDouble() < probMutacaoColuna) {
-                    var novasColunas = mutaColuna(colunas, i, instancia);
+                    var novasColunas = mutaColuna(colunas, i, instancia, random);
                     colunasNovaSolucao.addAll(novasColunas);
                 } else {
                     colunasNovaSolucao.add(colunas.get(i));
@@ -40,9 +41,7 @@ public class MutadorTrocaColunasAleatorio implements Operadores.Mutacao {
         return novasSolucoes;
     }
 
-    private HashSet<Integer> mutaColuna(List<Integer> colunas, int iColuna, Instancia instancia) {
-        var random = ThreadLocalRandom.current();
-
+    private HashSet<Integer> mutaColuna(List<Integer> colunas, int iColuna, Instancia instancia, Random random) {
         // escolhe uma coluna aleatoriamente
         var colRemovida = colunas.remove(iColuna);
 

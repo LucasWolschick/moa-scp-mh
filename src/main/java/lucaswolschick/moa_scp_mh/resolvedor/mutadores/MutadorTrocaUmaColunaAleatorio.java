@@ -3,13 +3,14 @@ package lucaswolschick.moa_scp_mh.resolvedor.mutadores;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import lucaswolschick.moa_scp_mh.parser.Instancia;
 import lucaswolschick.moa_scp_mh.resolvedor.Operadores;
 import lucaswolschick.moa_scp_mh.resolvedor.Solucao;
+import lucaswolschick.moa_scp_mh.resolvedor.ThreadRandomFactory;
 
 public class MutadorTrocaUmaColunaAleatorio implements Operadores.Mutacao {
 
@@ -20,19 +21,17 @@ public class MutadorTrocaUmaColunaAleatorio implements Operadores.Mutacao {
     }
 
     @Override
-    public List<Solucao> muta(List<Solucao> cruzamentos, Instancia instancia) {
+    public List<Solucao> muta(List<Solucao> cruzamentos, Instancia instancia, long semente) {
         var solucoes = new ArrayList<>(cruzamentos);
-        var random = ThreadLocalRandom.current();
-        return solucoes.stream().parallel()
-                .map((var solucao) -> random.nextDouble() < probMutacaoIndividuo
-                        ? mutaSolucao(solucao, instancia)
-                        : solucao)
+        var random = ThreadRandomFactory.getRandom(semente);
+        return IntStream.range(0, solucoes.size()).parallel()
+                .mapToObj((var i) -> random.nextDouble() < probMutacaoIndividuo
+                        ? mutaSolucao(solucoes.get(i), instancia, ThreadRandomFactory.getRandom(semente, (long) i))
+                        : solucoes.get(i))
                 .collect(Collectors.toList());
     }
 
-    private static Solucao mutaSolucao(Solucao solucao, Instancia instancia) {
-        var random = ThreadLocalRandom.current();
-
+    private static Solucao mutaSolucao(Solucao solucao, Instancia instancia, Random random) {
         // escolhe uma coluna aleatoriamente
         var colunas = new ArrayList<>(solucao.getColunas());
         var colRemovida = colunas.remove(random.nextInt(colunas.size()));
