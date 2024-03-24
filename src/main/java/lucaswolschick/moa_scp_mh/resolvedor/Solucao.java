@@ -1,8 +1,8 @@
 package lucaswolschick.moa_scp_mh.resolvedor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import lucaswolschick.moa_scp_mh.parser.Instancia;
@@ -37,21 +37,52 @@ public class Solucao {
         return "Solucao [colunas=" + colunas + ", custo=" + custo + "]";
     }
 
-    public Solucao removeRedundantes() {
+    public static Solucao removeRedundantes(Collection<Integer> colunas, Instancia instancia) {
         var colunasOrdenadas = new ArrayList<>(colunas);
         colunasOrdenadas.sort((var l, var r) -> Double.compare(
                 instancia.dados().get(l - 1).custo(),
                 instancia.dados().get(r - 1).custo()));
+
+        int[] colunasCobrindoLinha = new int[instancia.nLinhas()];
+        for (var col : colunasOrdenadas) {
+            for (var elem : instancia.dados().get(col - 1).elem()) {
+                colunasCobrindoLinha[elem - 1] += 1;
+            }
+        }
+
         for (int i = colunasOrdenadas.size() - 1; i >= 0; i--) {
-            int coluna = colunasOrdenadas.remove(i);
-            if (!solucaoValida(colunasOrdenadas, instancia)) {
+            // swap remove
+            // first swap
+            int coluna = colunasOrdenadas.set(i, colunasOrdenadas.get(colunasOrdenadas.size() - 1));
+            // then remove
+            colunasOrdenadas.remove(colunasOrdenadas.size() - 1);
+
+            var canRemove = true;
+            var linhas = instancia.dados().get(coluna - 1).elem();
+            for (var elem : linhas) {
+                if (colunasCobrindoLinha[elem - 1] == 1) {
+                    canRemove = false;
+                    break;
+                }
+            }
+
+            if (!canRemove) {
                 colunasOrdenadas.add(coluna);
+                continue;
+            }
+
+            for (var elem : linhas) {
+                colunasCobrindoLinha[elem - 1] -= 1;
             }
         }
         return new Solucao(new HashSet<>(colunasOrdenadas), instancia);
     }
 
-    public static boolean solucaoValida(List<Integer> colunas, Instancia instancia) {
+    public Solucao removeRedundantes() {
+        return Solucao.removeRedundantes(colunas, instancia);
+    }
+
+    public static boolean solucaoValida(Collection<Integer> colunas, Instancia instancia) {
         boolean[] linhas = new boolean[instancia.nLinhas()];
         int linhasFaltando = instancia.nLinhas();
 

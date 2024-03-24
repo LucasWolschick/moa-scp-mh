@@ -3,6 +3,7 @@ package lucaswolschick.moa_scp_mh.resolvedor;
 public class ResolvedorConfiguracao {
     private final int tamanhoPopulacao;
     private final int maxGeracoes;
+    private final long semente;
     private final Gerador gerador;
     private final Operadores.Avaliacao avaliador;
     private final Operadores.Selecao selecionador;
@@ -14,6 +15,7 @@ public class ResolvedorConfiguracao {
     public ResolvedorConfiguracao(
             int tamanhoPopulacao,
             int maxGeracoes,
+            long semente,
             Gerador gerador,
             Operadores.Avaliacao avaliador,
             Operadores.Selecao selecionador,
@@ -23,6 +25,7 @@ public class ResolvedorConfiguracao {
             Operadores.Atualizacao atualizador) {
         this.tamanhoPopulacao = tamanhoPopulacao;
         this.maxGeracoes = maxGeracoes;
+        this.semente = semente;
         this.gerador = gerador;
         this.avaliador = avaliador;
         this.selecionador = selecionador;
@@ -68,12 +71,17 @@ public class ResolvedorConfiguracao {
         return atualizador;
     }
 
+    public long semente() {
+        return semente;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + tamanhoPopulacao;
         result = prime * result + maxGeracoes;
+        result = prime * result + (int) (semente ^ (semente >>> 32));
         result = prime * result + ((gerador == null) ? 0 : gerador.hashCode());
         result = prime * result + ((avaliador == null) ? 0 : avaliador.hashCode());
         result = prime * result + ((selecionador == null) ? 0 : selecionador.hashCode());
@@ -96,6 +104,8 @@ public class ResolvedorConfiguracao {
         if (tamanhoPopulacao != other.tamanhoPopulacao)
             return false;
         if (maxGeracoes != other.maxGeracoes)
+            return false;
+        if (semente != other.semente)
             return false;
         if (gerador == null) {
             if (other.gerador != null)
@@ -137,12 +147,11 @@ public class ResolvedorConfiguracao {
 
     @Override
     public String toString() {
-        return "ResolvedorConfiguracao [\n\ttamanhoPopulacao=" + tamanhoPopulacao + ",\n\tmaxGeracoes=" + maxGeracoes
-                + ",\n\tgerador=" + gerador + ",\n\tavaliador=" + avaliador + ",\n\tselecionador=" + selecionador
-                + ",\n\tcruzador="
-                + cruzador + ",\n\tmutador=" + mutador + ",\n\tbuscaLocal=" + buscaLocal + ",\n\tatualizador="
-                + atualizador
-                + "\n]";
+        return "ResolvedorConfiguracao [\n\ttamanhoPopulacao=" + tamanhoPopulacao + ", \n\tmaxGeracoes=" + maxGeracoes
+                + ", \n\tgerador=" + gerador + ", \n\tavaliador=" + avaliador + ", \n\tselecionador="
+                + selecionador + ", \n\tcruzador=" + cruzador + ", \n\tmutador=" + mutador + ", \n\tbuscaLocal="
+                + buscaLocal
+                + ", \n\tatualizador=" + atualizador + "\n]";
     }
 
 }

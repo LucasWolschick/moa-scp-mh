@@ -42,7 +42,7 @@ public class MoaScpMh {
         }
 
         var instancia = Parser.parseProblema(entrada.toPath().getFileName().toString(), fonte);
-        var resolvedor = new Resolvedor(instancia, semente, 100, 10);
+        var resolvedor = new Resolvedor(instancia, semente);
         resolvedor.resolve();
         System.out.println(resolvedor.melhorSolucao().removeRedundantes());
     }

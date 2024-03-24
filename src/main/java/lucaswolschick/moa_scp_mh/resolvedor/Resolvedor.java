@@ -12,6 +12,7 @@ import lucaswolschick.moa_scp_mh.resolvedor.buscaLocal.BuscaLocal;
 import lucaswolschick.moa_scp_mh.resolvedor.cruzadores.CruzadorRemovedorRedundancias;
 import lucaswolschick.moa_scp_mh.resolvedor.geradores.GeradorAleatorio;
 import lucaswolschick.moa_scp_mh.resolvedor.mutadores.MutadorTrocaColunasAleatorio;
+import lucaswolschick.moa_scp_mh.resolvedor.selecionadores.SelecionadorClassificador;
 import lucaswolschick.moa_scp_mh.resolvedor.selecionadores.SelecionadorTorneio;
 
 public class Resolvedor {
@@ -19,30 +20,31 @@ public class Resolvedor {
     private Instancia instancia;
     private List<Solucao> pop;
     private int geracao;
-    private long semente;
 
-    public Resolvedor(Instancia instancia, long semente, ResolvedorConfiguracao cfg) {
+    public Resolvedor(Instancia instancia, ResolvedorConfiguracao cfg) {
         this.cfg = cfg;
         this.instancia = instancia;
         this.pop = new ArrayList<>();
         this.geracao = 0;
-        this.semente = semente;
     }
 
-    public Resolvedor(Instancia instancia, long semente, int tamanhoPopulacao, int maxGeracoes) {
-        this(instancia, semente, new ResolvedorConfiguracao(
-                tamanhoPopulacao,
-                maxGeracoes,
+    public Resolvedor(Instancia instancia, long semente) {
+        this(instancia, new ResolvedorConfiguracao(
+                100,
+                10,
+                semente,
                 new GeradorAleatorio(),
                 new AvaliadorCusto(),
-                new SelecionadorTorneio(4),
+                new SelecionadorTorneio(3),
                 new CruzadorRemovedorRedundancias(),
                 new MutadorTrocaColunasAleatorio(0.2f),
-                new BuscaLocal(BuscaLocal.Estrategia.FIRST_IMPROVEMENT, 2),
-                new AtualizadorElitista(0.1f)));
+                new BuscaLocal(BuscaLocal.Estrategia.BEST_IMPROVEMENT, 1),
+                new AtualizadorElitista(0.15f)));
     }
 
     public void resolve() {
+        long semente = this.cfg.semente();
+
         System.out.println("Instância: " + instancia.nome());
         System.out.println("Configuração: " + cfg);
         System.out.println("Semente: " + semente);
@@ -72,6 +74,8 @@ public class Resolvedor {
     }
 
     private List<Solucao> criaGeracao() {
+        long semente = this.cfg.semente();
+
         // avalia população
         var avaliacao = cfg.avaliador().avalia(pop, instancia, semente);
         // gera indivíduos descendentes
@@ -122,6 +126,7 @@ public class Resolvedor {
     }
 
     private List<Solucao> geraPopulacaoInicial() {
+        long semente = this.cfg.semente();
         return cfg.gerador().geraPopulacaoInicial(instancia, cfg.tamanhoPopulacao(), semente);
     }
 

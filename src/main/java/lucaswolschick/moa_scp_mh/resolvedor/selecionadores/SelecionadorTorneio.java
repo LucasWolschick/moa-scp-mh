@@ -24,8 +24,10 @@ public class SelecionadorTorneio implements Operadores.Selecao {
 
         var sol1 = selecionaTorneio(solucoes, avaliacao, r);
         var sol2 = selecionaTorneio(solucoes, avaliacao, r);
-        while (sol1 == sol2) {
+        int tentativas = 10;
+        while (sol1 == sol2 && tentativas > 0) {
             sol2 = selecionaTorneio(solucoes, avaliacao, r);
+            tentativas--;
         }
 
         return new Solucao[] { sol1, sol2 };

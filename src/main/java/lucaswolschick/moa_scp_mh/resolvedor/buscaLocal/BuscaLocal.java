@@ -1,7 +1,6 @@
 package lucaswolschick.moa_scp_mh.resolvedor.buscaLocal;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -27,16 +26,17 @@ public class BuscaLocal implements Operadores.BuscaLocal {
 
     @Override
     public List<Solucao> buscaLocal(List<Solucao> pop, Instancia instancia, long _seed) {
+        var allColunas = IntStream.rangeClosed(1, instancia.nColunas()).boxed().collect(Collectors.toList());
         return IntStream.range(0, pop.size()).parallel()
-                .mapToObj((var i) -> melhoraSolucao(pop.get(i), instancia))
+                .mapToObj((var i) -> melhoraSolucao(allColunas, pop.get(i), instancia))
                 .collect(Collectors.toList());
     }
 
-    private Solucao melhoraSolucao(Solucao solucao, Instancia instancia) {
+    private Solucao melhoraSolucao(List<Integer> allColunas, Solucao solucao, Instancia instancia) {
         Solucao s = solucao;
 
         for (;;) {
-            var novaSolucao = melhoraSolucaoPasso(s, instancia);
+            var novaSolucao = melhoraSolucaoPasso(allColunas, s, instancia);
             if (novaSolucao.getCusto() < s.getCusto()) {
                 s = novaSolucao;
             } else {
@@ -47,36 +47,75 @@ public class BuscaLocal implements Operadores.BuscaLocal {
         return s;
     }
 
-    private Solucao melhoraSolucaoPasso(Solucao solucao, Instancia instancia) {
-        var allColunas = IntStream.rangeClosed(1, instancia.nColunas()).boxed().collect(Collectors.toList());
+    private Solucao melhoraSolucaoPasso(List<Integer> allColunas, Solucao solucao, Instancia instancia) {
         var vizinhos = new ArrayList<Solucao>();
-        var colunas = new ArrayList<Integer>(solucao.getColunas());
+
+        var solucaoColunas = solucao.getColunas();
+        var colunas = new ArrayList<Integer>(solucaoColunas.size());
+        for (var col : solucaoColunas) {
+            colunas.add(col);
+        }
+
+        var colunasCobrindoLinha = new int[instancia.nLinhas()];
+        var linhasDescobertas = instancia.nLinhas();
+        for (var col : colunas) {
+            for (var elem : instancia.dados().get(col - 1).elem()) {
+                if (colunasCobrindoLinha[elem - 1] == 0) {
+                    linhasDescobertas -= 1;
+                }
+                colunasCobrindoLinha[elem - 1] += 1;
+            }
+        }
+
         for (int numNovasColunas = 0; numNovasColunas <= colunasTrocadas; numNovasColunas++) {
             for (var coluna : colunas) {
-                var novasColunas = new ArrayList<Integer>();
+                var novasColunas = new HashSet<Integer>(colunas);
+                var novasColunasCobrindoLinhas = colunasCobrindoLinha.clone();
+                var novasLinhasDescobertas = linhasDescobertas;
 
-                // remove a coluna sorteada
-                for (var col : colunas) {
-                    if (col != coluna) {
-                        novasColunas.add(col);
+                novasColunas.remove(coluna);
+                for (var elem : instancia.dados().get(coluna - 1).elem()) {
+                    novasColunasCobrindoLinhas[elem - 1] -= 1;
+                    if (novasColunasCobrindoLinhas[elem - 1] == 0) {
+                        novasLinhasDescobertas += 1;
                     }
                 }
 
-                var colunasNaoNaSolucao = allColunas.stream().filter(c -> !novasColunas.contains(c))
-                        .collect(Collectors.toList());
+                var colunasNaoNaSolucao = new ArrayList<Integer>(allColunas.size());
+                for (var c : allColunas) {
+                    if (!novasColunas.contains(c)) {
+                        colunasNaoNaSolucao.add(c);
+                    }
+                }
 
                 // adiciona novas colunas
                 for (var comb : new CombinationsIterator<>(colunasNaoNaSolucao, numNovasColunas)) {
-                    var novaSolucao = new ArrayList<Integer>(novasColunas);
-                    novaSolucao.addAll(comb);
-                    if (Solucao.solucaoValida(novaSolucao, instancia)) {
-                        var sol = new Solucao(new HashSet<>(novaSolucao), instancia).removeRedundantes();
+                    var novaSolucao = new HashSet<>(novasColunas);
+                    for (var c : comb) {
+                        novaSolucao.add(c);
+                        for (var elem : instancia.dados().get(c - 1).elem()) {
+                            if (novasColunasCobrindoLinhas[elem - 1] == 0) {
+                                novasLinhasDescobertas -= 1;
+                            }
+                            novasColunasCobrindoLinhas[elem - 1] += 1;
+                        }
+                    }
+                    if (novasLinhasDescobertas == 0) {
+                        var sol = Solucao.removeRedundantes(novaSolucao, instancia);
                         if (estrategia == Estrategia.FIRST_IMPROVEMENT) {
                             if (sol.getCusto() < solucao.getCusto()) {
                                 return sol;
                             }
                         } else {
                             vizinhos.add(sol);
+                        }
+                    }
+                    for (var c : comb) {
+                        for (var elem : instancia.dados().get(c - 1).elem()) {
+                            novasColunasCobrindoLinhas[elem - 1] -= 1;
+                            if (novasColunasCobrindoLinhas[elem - 1] == 0) {
+                                novasLinhasDescobertas += 1;
+                            }
                         }
                     }
                 }
@@ -86,7 +125,17 @@ public class BuscaLocal implements Operadores.BuscaLocal {
         if (estrategia == Estrategia.FIRST_IMPROVEMENT) {
             return solucao;
         } else {
-            return vizinhos.stream().min(Comparator.comparing(Solucao::getCusto)).orElse(solucao);
+            if (vizinhos.isEmpty()) {
+                return solucao;
+            }
+
+            var min = vizinhos.get(0);
+            for (var v : vizinhos) {
+                if (v.getCusto() < min.getCusto()) {
+                    min = v;
+                }
+            }
+            return min;
         }
     }
 
@@ -104,10 +153,14 @@ class CombinationsIterator<T> implements Iterable<List<T>>, Iterator<List<T>> {
     private int[] indices;
     private boolean hasNext = true;
 
+    // evitar alocação de memória
+    private ArrayList<T> result;
+
     public CombinationsIterator(List<T> elementos, int k) {
         this.elementos = elementos;
         this.k = k;
         this.indices = IntStream.range(0, k).toArray();
+        this.result = new ArrayList<>(this.elementos.size());
     }
 
     @Override
@@ -122,7 +175,8 @@ class CombinationsIterator<T> implements Iterable<List<T>>, Iterator<List<T>> {
 
     @Override
     public List<T> next() {
-        var result = new ArrayList<T>();
+        result.clear();
+
         for (var i : indices) {
             result.add(elementos.get(i));
         }
