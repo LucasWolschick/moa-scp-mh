@@ -12,7 +12,6 @@ import lucaswolschick.moa_scp_mh.resolvedor.buscaLocal.BuscaLocal;
 import lucaswolschick.moa_scp_mh.resolvedor.cruzadores.CruzadorRemovedorRedundancias;
 import lucaswolschick.moa_scp_mh.resolvedor.geradores.GeradorAleatorio;
 import lucaswolschick.moa_scp_mh.resolvedor.mutadores.MutadorTrocaColunasAleatorio;
-import lucaswolschick.moa_scp_mh.resolvedor.selecionadores.SelecionadorClassificador;
 import lucaswolschick.moa_scp_mh.resolvedor.selecionadores.SelecionadorTorneio;
 
 public class Resolvedor {

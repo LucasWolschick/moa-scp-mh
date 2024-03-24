@@ -53,26 +53,29 @@ public class Tester {
         Selecao[] selecionadores = { new SelecionadorClassificador(), new SelecionadorTorneio(3) };
         Cruzamento[] cruzadores = { new CruzadorRemovedorRedundancias() };
         Mutacao[] mutadores = { new MutadorTrocaColunasAleatorio(0.2) };
-        BuscaLocal[] buscaLocals = { new BuscaLocal(BuscaLocal.Estrategia.FIRST_IMPROVEMENT, 2),
-                new BuscaLocal(BuscaLocal.Estrategia.BEST_IMPROVEMENT, 1) };
+        BuscaLocal[] buscaLocals = {
+                null,
+                new BuscaLocal(BuscaLocal.Estrategia.BEST_IMPROVEMENT, 1),
+                new BuscaLocal(BuscaLocal.Estrategia.FIRST_IMPROVEMENT, 1) };
         Atualizacao[] atualizadores = { new AtualizadorElitista(0.15) };
 
         int semente = 42;
 
         List<Resolvedor> resolvedores = new ArrayList<>();
 
-        for (int tp : tamPop) {
-            for (int ng : numGer) {
-                for (Instancia inst : instancias) {
-                    for (Gerador ger : geradores) {
-                        for (Avaliacao ava : avaliadores) {
-                            for (Selecao sel : selecionadores) {
-                                for (Cruzamento cruz : cruzadores) {
-                                    for (Mutacao mut : mutadores) {
-                                        for (BuscaLocal bl : buscaLocals) {
+        for (BuscaLocal bl : buscaLocals) {
+            for (Instancia inst : instancias) {
+                for (int tp : tamPop) {
+                    for (int ng : numGer) {
+                        for (Gerador ger : geradores) {
+                            for (Avaliacao ava : avaliadores) {
+                                for (Selecao sel : selecionadores) {
+                                    for (Cruzamento cruz : cruzadores) {
+                                        for (Mutacao mut : mutadores) {
                                             for (Atualizacao atu : atualizadores) {
-                                                resolvedores.add(new Resolvedor(inst, semente,
-                                                        new ResolvedorConfiguracao(tp, ng, ger, ava, sel, cruz, mut, bl,
+                                                resolvedores.add(new Resolvedor(inst,
+                                                        new ResolvedorConfiguracao(tp, ng, semente, ger, ava, sel, cruz,
+                                                                mut, bl,
                                                                 atu)));
                                             }
                                         }
@@ -92,11 +95,12 @@ public class Tester {
                     System.err.println("Resolvendo " + (i + 1) + "/" + resolvedores.size() + "...");
                     System.err.println(resolvedor.cfg());
                     try {
-                        var newOut = new File("output/" + i + ".txt");
+                        var newOut = new File("output/" + (i + 1) + ".txt");
                         newOut.createNewFile();
                         var printStream = new PrintStream(newOut);
                         System.setOut(printStream);
                         resolvedor.resolve();
+                        System.out.println("Solução encontrada: " + resolvedor.melhorSolucao().removeRedundantes());
                         System.out.close();
                     } catch (Exception e) {
                         e.printStackTrace();
