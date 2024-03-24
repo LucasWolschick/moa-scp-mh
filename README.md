@@ -77,6 +77,8 @@ A classe `Tester.py` realiza uma bateria de 196 testes quando executada. As saí
 cada teste são geradas em um subdiretório `output/`. Este repositório contém saídas das
 maiorias dos casos de teste.
 
+A planilha `data.ods` contém uma análise dos casos de teste executados.
+
 ## Relatório
 
 O relatório do trabalho se encontra no arquivo `Relatório.pdf`, disponível na pasta raiz.
