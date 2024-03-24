@@ -1,0 +1,36 @@
+Instância: Wren_02.dat
+Configuração: ResolvedorConfiguracao [
+	tamanhoPopulacao=1000,
+	maxGeracoes=10,
+	gerador=GeradorAleatorio [],
+	avaliador=AvaliadorCusto [],
+	selecionador=SelecionadorClassificador [],
+	cruzador=CruzadorRemovedorRedundancias [],
+	mutador=MutadorTrocaColunasAleatorio [probMutacaoColuna=0.2],
+	buscaLocal=null,
+	atualizador=AtualizadorElitista [fracElitista=0.15]
+]
+Semente: 42
+Gerando população inicial (geração 1)...
+(Custo = 18315.0; Custo médio = 20722.041; Desvio padrão = 822.0453892218732; tempo = 0.599s)
+Geração 2...
+(Custo = 17504.0; Custo médio = 19987.806; Desvio padrão = 1006.4641232451804; tempo = 1.458s)
+Geração 3...
+(Custo = 17150.0; Custo médio = 19570.647333333334; Desvio padrão = 1055.5039402178913; tempo = 2.713s)
+Geração 4...
+(Custo = 16792.0; Custo médio = 19299.0365; Desvio padrão = 1063.9257954351413; tempo = 4.468s)
+Geração 5...
+(Custo = 16670.0; Custo médio = 19111.1552; Desvio padrão = 1055.5587369551695; tempo = 6.718s)
+Geração 6...
+(Custo = 16577.0; Custo médio = 18964.347833333333; Desvio padrão = 1046.654924000087; tempo = 9.398s)
+Geração 7...
+(Custo = 16577.0; Custo médio = 18842.920142857143; Desvio padrão = 1039.6594329804382; tempo = 12.563s)
+Geração 8...
+(Custo = 16577.0; Custo médio = 18746.879875; Desvio padrão = 1028.5405289279759; tempo = 16.044s)
+Geração 9...
+(Custo = 16577.0; Custo médio = 18666.303333333333; Desvio padrão = 1018.6584550796921; tempo = 19.772s)
+Geração 10...
+(Custo = 16494.0; Custo médio = 18594.5497; Desvio padrão = 1011.0632951643497; tempo = 24.23s)
+Feito.
+Tempo de execução: 24.23s
+Solução encontrada: Solucao [colunas=[1152, 5120, 4737, 4993, 2629, 4102, 4360, 4105, 5001, 5130, 4236, 5070, 5390, 5007, 5263, 18, 5266, 2194, 5522, 5459, 20, 5143, 5399, 5147, 2461, 4638, 5217, 33, 162, 164, 5029, 2793, 5481, 5482, 5483, 5484, 5427, 1851, 5503], custo=16494.0]

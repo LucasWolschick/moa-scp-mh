@@ -1,0 +1,36 @@
+Instância: Wren_04.dat
+Configuração: ResolvedorConfiguracao [
+	tamanhoPopulacao=100,
+	maxGeracoes=10,
+	gerador=GeradorAleatorio [],
+	avaliador=AvaliadorCusto [],
+	selecionador=SelecionadorTorneio [k=3],
+	cruzador=CruzadorRemovedorRedundancias [],
+	mutador=MutadorTrocaColunasAleatorio [probMutacaoColuna=0.2],
+	buscaLocal=null,
+	atualizador=AtualizadorElitista [fracElitista=0.15]
+]
+Semente: 42
+Gerando população inicial (geração 1)...
+(Custo = 79967.0; Custo médio = 84379.66; Desvio padrão = 2114.155600573038; tempo = 0.284s)
+Geração 2...
+(Custo = 72798.0; Custo médio = 80967.13; Desvio padrão = 3972.4801314890647; tempo = 1.089s)
+Geração 3...
+(Custo = 71558.0; Custo médio = 78646.83333333333; Desvio padrão = 4653.017630432888; tempo = 1.802s)
+Geração 4...
+(Custo = 71474.0; Custo médio = 77322.75; Desvio padrão = 4663.454531559175; tempo = 2.633s)
+Geração 5...
+(Custo = 70324.0; Custo médio = 76425.442; Desvio padrão = 4559.1878217313715; tempo = 3.368s)
+Geração 6...
+(Custo = 70175.0; Custo médio = 75751.90666666666; Desvio padrão = 4442.7461038034035; tempo = 4.211s)
+Geração 7...
+(Custo = 70039.0; Custo médio = 75116.12285714285; Desvio padrão = 4403.701975533703; tempo = 5.253s)
+Geração 8...
+(Custo = 69236.0; Custo médio = 74602.47625; Desvio padrão = 4341.854359145523; tempo = 6.209s)
+Geração 9...
+(Custo = 69236.0; Custo médio = 74201.65333333334; Desvio padrão = 4252.218331723474; tempo = 7.213s)
+Geração 10...
+(Custo = 69236.0; Custo médio = 73882.336; Desvio padrão = 4150.219125527457; tempo = 8.1s)
+Feito.
+Tempo de execução: 8.1s
+Solução encontrada: Solucao [colunas=[2561, 515, 1539, 2563, 1285, 3079, 265, 1802, 778, 523, 2574, 271, 2833, 534, 3355, 3356, 285, 1309, 3358, 33, 3875, 547, 2852, 1572, 3366, 3110, 2860, 558, 1072, 305, 3640, 824, 3389, 1086, 3392, 2625, 1091, 2628, 70, 2630, 2631, 1096, 330, 2893, 1870, 2389, 1365, 599, 855, 3161, 1626, 3419, 4444, 3933, 93, 607, 3423, 1377, 2659, 1895, 4455, 2663, 361, 2410, 3435, 1134, 4207, 623, 883, 1397, 2679, 2428, 895, 3456, 2434, 1156, 133, 3461, 646, 2442, 140, 142, 1167, 143, 656, 1168, 2962, 1171, 916, 1691, 2974, 3494, 2728, 937, 939, 684, 2733, 2735, 689, 3250, 2484, 2741, 182, 442, 3263, 703, 1729, 1475, 2246, 967, 1736, 2761, 3530, 2766, 2767, 1232, 210, 723, 3284, 2519, 218, 1242, 221, 989, 1503, 2528, 3809, 737, 2788, 230, 1768, 1007, 3570, 2803, 1781, 501, 758, 759, 248, 1272, 1787, 4093, 1021, 2814, 2047], custo=69236.0]

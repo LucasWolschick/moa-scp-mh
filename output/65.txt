@@ -1,0 +1,36 @@
+Instância: Teste_01.dat
+Configuração: ResolvedorConfiguracao [
+	tamanhoPopulacao=100,
+	maxGeracoes=10,
+	gerador=GeradorAleatorio [],
+	avaliador=AvaliadorCusto [],
+	selecionador=SelecionadorClassificador [],
+	cruzador=CruzadorRemovedorRedundancias [],
+	mutador=MutadorTrocaColunasAleatorio [probMutacaoColuna=0.2],
+	buscaLocal=BuscaLocal [estrategia=BEST_IMPROVEMENT, colunasTrocadas=1],
+	atualizador=AtualizadorElitista [fracElitista=0.15]
+]
+Semente: 42
+Gerando população inicial (geração 1)...
+(Custo = 866.7999999999998; Custo médio = 1013.7825; Desvio padrão = 84.12423468515857; tempo = 0.056s)
+Geração 2...
+(Custo = 600.95; Custo médio = 862.3716499999999; Desvio padrão = 172.96519565309683; tempo = 1.525s)
+Geração 3...
+(Custo = 600.5300000000001; Custo médio = 791.4354333333333; Desvio padrão = 173.7666518402908; tempo = 2.108s)
+Geração 4...
+(Custo = 597.2900000000001; Custo médio = 755.014925; Desvio padrão = 163.58659730258148; tempo = 2.364s)
+Geração 5...
+(Custo = 596.9300000000001; Custo médio = 732.52824; Desvio padrão = 153.44141990867257; tempo = 2.535s)
+Geração 6...
+(Custo = 596.9300000000001; Custo médio = 717.4262333333334; Desvio padrão = 144.5014768973709; tempo = 2.712s)
+Geração 7...
+(Custo = 594.76; Custo médio = 706.3776285714287; Desvio padrão = 136.77991282147323; tempo = 2.865s)
+Geração 8...
+(Custo = 594.76; Custo médio = 697.7407125; Desvio padrão = 130.26829718097332; tempo = 3.024s)
+Geração 9...
+(Custo = 594.76; Custo médio = 691.2673333333333; Desvio padrão = 124.41810579766147; tempo = 3.197s)
+Geração 10...
+(Custo = 594.76; Custo médio = 685.92086; Desvio padrão = 119.35277210550942; tempo = 3.339s)
+Feito.
+Tempo de execução: 3.339s
+Solução encontrada: Solucao [colunas=[129, 242, 133, 278, 185, 10, 58, 44, 77, 109], custo=594.76]
